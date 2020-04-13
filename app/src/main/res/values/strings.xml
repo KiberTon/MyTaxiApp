@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">My TaxiApp</string>
     <string name="taxiApp">TaxiApp</string>
+    <string name="i_m_a_passenger">I\'m a passenger</string>
+    <string name="i_m_a_driver">I\'m a driver</string>
 </resources>
