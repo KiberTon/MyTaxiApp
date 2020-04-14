@@ -79,6 +79,7 @@ public class DriverSignInActivity extends AppCompatActivity {
             return false;
         } else {
             textInputPassword.setError("");
+            textInputConfirmPassword.setError("");
             return true;
         }
     }

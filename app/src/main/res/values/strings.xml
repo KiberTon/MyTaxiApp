@@ -3,10 +3,13 @@
     <string name="taxiApp">TaxiApp</string>
     <string name="i_m_a_passenger">I\'m a passenger</string>
     <string name="i_m_a_driver">I\'m a driver</string>
-    <string name="email">Email</string>
-    <string name="name">Name</string>
-    <string name="password">Password</string>
-    <string name="confirm_password">Confirm password</string>
+    <string name="email">Email:</string>
+    <string name="name">Name:</string>
+    <string name="password">Password:</string>
+    <string name="confirm_password">Confirm password:</string>
     <string name="sign_up">Sign Up</string>
     <string name="tap_to_log_in">Tap to Log In</string>
+    <string name="email_passenger">Email:</string>
+    <string name="name_passenger">Name:</string>
+    <string name="password_passenger">Password:</string>
 </resources>
