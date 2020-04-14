@@ -72,6 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="250dp"
         android:background="@color/colorAccent"
+        android:onClick="loginSignUpUser"
         android:text="@string/sign_up"
         android:textSize="20sp" />
 
@@ -83,6 +84,7 @@
         android:layout_marginTop="16dp"
         android:background="@color/colorAccent"
         android:clickable="true"
+        android:onClick="toggleLoginSignUp"
         android:text="@string/tap_to_log_in"
         android:textColor="@color/colorPrimary" />
 
