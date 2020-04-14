@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -36,6 +37,7 @@ public class DriverSignInActivity extends AppCompatActivity {
     private boolean validateEmail() {
 
         String emailInput = textInputEmail.getEditText().getText().toString().trim();
+
         if (emailInput.isEmpty()) {
             textInputEmail.setError("Please input your email");
             return false;
@@ -46,7 +48,9 @@ public class DriverSignInActivity extends AppCompatActivity {
     }
 
     private boolean validateName() {
+
         String nameInput = textInputName.getEditText().getText().toString().trim();
+
         if (nameInput.isEmpty()) {
             textInputName.setError("Please input your name");
             return false;
@@ -82,6 +86,14 @@ public class DriverSignInActivity extends AppCompatActivity {
 
     public void loginSignUpUser(View view) {
 
+        if (!validateEmail() | !validateName() | !validatePassword()) {
+            return;
+        }
+
+        String userInput = "Email: " + textInputEmail.getEditText().getText().toString().trim() + "\n" + "Name: " + textInputName.getEditText().getText().toString().trim() + "\n" +
+                "Password: " + textInputPassword.getEditText().getText().toString().trim();
+
+        Toast.makeText(this, userInput, Toast.LENGTH_LONG).show();
     }
 
     public void toggleLoginSignUp(View view) {
