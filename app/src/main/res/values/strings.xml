@@ -12,4 +12,6 @@
     <string name="email_passenger">Email:</string>
     <string name="name_passenger">Name:</string>
     <string name="password_passenger">Password:</string>
+    <string name="passenger_sign_in">Passenger Sign In</string>
+    <string name="driver_sign_in">Driver Sign In</string>
 </resources>

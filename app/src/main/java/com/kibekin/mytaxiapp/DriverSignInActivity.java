@@ -1,17 +1,28 @@
 package com.kibekin.mytaxiapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class DriverSignInActivity extends AppCompatActivity {
 
+    private FirebaseAuth auth;
+    private static final String TAG = "SignUpDriver";
     private TextInputLayout textInputEmail;
     private TextInputLayout textInputName;
     private TextInputLayout textInputPassword;
@@ -20,10 +31,17 @@ public class DriverSignInActivity extends AppCompatActivity {
     private Button loginSingUpButton;
     private TextView toggleLoginSingUpTextView;
 
+    private boolean isLoginModeActive;
+
+    private FirebaseDatabase database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_sign_in);
+
+        auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
 
         textInputConfirmPassword = findViewById(R.id.textInputConfirmPassword);
         textInputEmail = findViewById(R.id.textInputEmail);
@@ -32,6 +50,7 @@ public class DriverSignInActivity extends AppCompatActivity {
 
         loginSingUpButton = findViewById(R.id.loginSignUpButton);
         toggleLoginSingUpTextView = findViewById(R.id.toggleLoginSignUpTextView);
+
     }
 
     private boolean validateEmail() {
@@ -66,7 +85,6 @@ public class DriverSignInActivity extends AppCompatActivity {
     private boolean validatePassword() {
 
         String passwordInput = textInputPassword.getEditText().getText().toString().trim();
-        String confirmPasswordInput = textInputConfirmPassword.getEditText().getText().toString().trim();
 
         if (passwordInput.isEmpty()) {
             textInputPassword.setError("Please input your password");
@@ -74,7 +92,19 @@ public class DriverSignInActivity extends AppCompatActivity {
         } else if (passwordInput.length() < 7) {
             textInputPassword.setError("Password length have to be more than 6");
             return false;
-        } else if (!passwordInput.equals(confirmPasswordInput)) {
+        } else {
+            textInputPassword.setError("");
+            textInputConfirmPassword.setError("");
+            return true;
+        }
+    }
+
+    private boolean validateConfirmPassword() {
+
+        String passwordInput = textInputPassword.getEditText().getText().toString().trim();
+        String confirmPasswordInput = textInputConfirmPassword.getEditText().getText().toString().trim();
+
+        if (!passwordInput.equals(confirmPasswordInput)) {
             textInputPassword.setError("Password have to match");
             return false;
         } else {
@@ -91,13 +121,64 @@ public class DriverSignInActivity extends AppCompatActivity {
             return;
         }
 
-        String userInput = "Email: " + textInputEmail.getEditText().getText().toString().trim() + "\n" + "Name: " + textInputName.getEditText().getText().toString().trim() + "\n" +
-                "Password: " + textInputPassword.getEditText().getText().toString().trim();
+        if (isLoginModeActive) {
+            auth.signInWithEmailAndPassword(textInputEmail.getEditText().getText().toString().trim(), textInputPassword.getEditText().getText().toString().trim())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signInWithEmail:success");
+                                FirebaseUser user = auth.getCurrentUser();
+//                                updateUI(user);
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                Toast.makeText(DriverSignInActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+//                                updateUI(null);
+                            }
 
-        Toast.makeText(this, userInput, Toast.LENGTH_LONG).show();
+                        }
+                    });
+        } else {
+
+            if (!validateEmail() | !validateName() | !validatePassword() | !validateConfirmPassword()) {
+                return;
+            }
+
+            auth.createUserWithEmailAndPassword(textInputEmail.getEditText().getText().toString().trim(), textInputPassword.getEditText().getText().toString().trim())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "createUserWithEmail:success");
+                                FirebaseUser user = auth.getCurrentUser();
+//                            updateUI(user);
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                Toast.makeText(DriverSignInActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+//                            updateUI(null);
+                            }
+                        }
+                    });
+        }
     }
 
     public void toggleLoginSignUp(View view) {
-
+        if (isLoginModeActive) {
+            isLoginModeActive = false;
+            loginSingUpButton.setText("Sign Up");
+            toggleLoginSingUpTextView.setText("Or, log in");
+            textInputConfirmPassword.setVisibility(View.VISIBLE);
+        } else {
+            isLoginModeActive = true;
+            loginSingUpButton.setText("Log In");
+            toggleLoginSingUpTextView.setText("Or, sign up");
+            textInputConfirmPassword.setVisibility(View.GONE);
+        }
     }
 }

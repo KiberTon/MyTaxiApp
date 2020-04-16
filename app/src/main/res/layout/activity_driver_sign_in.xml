@@ -8,6 +8,16 @@
     android:padding="16dp"
     tools:context=".DriverSignInActivity">
 
+    <TextView
+        android:text="@string/driver_sign_in"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:textColor="@color/colorPrimary"
+        android:background="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputEmail"
         android:layout_width="match_parent"
@@ -80,10 +90,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimary"
         android:clickable="true"
         android:onClick="toggleLoginSignUp"
         android:text="@string/tap_to_log_in"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@android:color/white" />
 
 </LinearLayout>
