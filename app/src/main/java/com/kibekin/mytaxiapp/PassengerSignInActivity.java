@@ -3,6 +3,7 @@ package com.kibekin.mytaxiapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +38,10 @@ public class PassengerSignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_passenger_sign_in);
 
         auth = FirebaseAuth.getInstance();
+
+        if (auth.getCurrentUser() != null) {
+            startActivity(new Intent(PassengerSignInActivity.this, PassengerMapsActivity.class));
+        }
 
         textInputEmail = findViewById(R.id.textInputEmail);
         textInputName = findViewById(R.id.textInputName);
@@ -119,6 +124,7 @@ public class PassengerSignInActivity extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithEmail:success");
                                 FirebaseUser user = auth.getCurrentUser();
+                                startActivity(new Intent(PassengerSignInActivity.this, PassengerMapsActivity.class));
 //                                updateUI(user);
                             } else {
                                 // If sign in fails, display a message to the user.
@@ -144,6 +150,7 @@ public class PassengerSignInActivity extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "createUserWithEmail:success");
                                 FirebaseUser user = auth.getCurrentUser();
+                                startActivity(new Intent(PassengerSignInActivity.this, PassengerMapsActivity.class));
 //                            updateUI(user);
                             } else {
                                 // If sign in fails, display a message to the user.

@@ -34,15 +34,17 @@ public class DriverSignInActivity extends AppCompatActivity {
 
     private boolean isLoginModeActive;
 
-    private FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_sign_in);
-
         auth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
+
+        if (auth.getCurrentUser() != null) {
+            startActivity(new Intent(DriverSignInActivity.this, DriverMapsActivity.class));
+        }
+
 
         textInputConfirmPassword = findViewById(R.id.textInputConfirmPassword);
         textInputEmail = findViewById(R.id.textInputEmail);
@@ -129,8 +131,8 @@ public class DriverSignInActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 Log.d(TAG, "signInWithEmail:success");
-                                startActivity(new Intent(DriverSignInActivity.this, DriverMapsActivity.class));
                                 FirebaseUser user = auth.getCurrentUser();
+                                startActivity(new Intent(DriverSignInActivity.this, DriverMapsActivity.class));
 //                                updateUI(user);
                             } else {
                                 Log.w(TAG, "signInWithEmail:failure", task.getException());
